@@ -55,8 +55,9 @@ services:
       - 3000:3000
     volumes:
       - grafana_data:/var/lib/grafana:rw
-      - ./grafana/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./grafana:/etc/grafana/provisioning:ro
     environment:
+      GF_INSTALL_PLUGINS: hamedkarbasi93-kafka-datasource
       INFLUX_TOKEN: $INFLUX_TOKEN
 
 volumes:
