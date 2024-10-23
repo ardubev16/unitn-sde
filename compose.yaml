@@ -55,7 +55,7 @@ services:
       - 3000:3000
     volumes:
       - grafana_data:/var/lib/grafana:rw
-      - ./grafana/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./grafana:/etc/grafana/provisioning:ro
     environment:
       INFLUX_TOKEN: $INFLUX_TOKEN
 
