@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
 
 import argparse
+import json
 import logging
 import time
-from random import choice, randint
 from typing import NoReturn
 
 import psutil
 from kafka import KafkaConsumer, KafkaProducer
 
 logging.basicConfig(level=logging.INFO)
-BOOTSTRAP_SERVER = "localhost:9094"
+BOOTSTRAP_SERVER = "172.31.199.2:9094"
+# BOOTSTRAP_SERVER = "localhost:9094"
 
 
 def consume_and_print(group_id: str) -> None:
@@ -20,23 +21,19 @@ def consume_and_print(group_id: str) -> None:
         bootstrap_servers=BOOTSTRAP_SERVER,
     )
     for msg in consumer:
-        print(msg)
+        print(msg.value)
 
 
-def produce_counter() -> NoReturn:
+def produce_to_cpu(producer_id: str) -> NoReturn:
     producer = KafkaProducer(bootstrap_servers=BOOTSTRAP_SERVER)
-    possible_keys = ["key1", "key2", "key3", "key4"]
-    counter = 0
     while True:
         cpu_percent = psutil.cpu_percent()
         producer.send(
             "cpu",
-            key=choice(possible_keys).encode(),
-            # partition=randint(0, 1),
-            value=str(counter).encode(),
+            key=producer_id.encode(),
+            value=json.dumps({"producer_id": producer_id, "cpu_percent": cpu_percent}).encode(),
         )
-        counter += 1
-        time.sleep(0.01)
+        time.sleep(0.5)
 
 
 def main() -> None:
@@ -48,7 +45,7 @@ def main() -> None:
 
     match args.subparser:
         case "producer":
-            produce_counter()
+            produce_to_cpu("test_prod")
         case "consumer":
             consume_and_print("test")
 
