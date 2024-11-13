@@ -1,20 +1,13 @@
 #!/usr/bin/env python3
 
 import argparse
-import json
 import logging
-import os
-import time
 from pathlib import Path
-from tempfile import TemporaryDirectory
-from typing import NoReturn
+from uuid import uuid4
 
-import cv2
-import ffmpeg
-import numpy as np
-import psutil
-import requests
 from kafka import KafkaConsumer, KafkaProducer
+
+from src import cpu, jpeg
 
 logging.basicConfig(level=logging.INFO)
 TOPICS = ["cpu", "jpeg"]
@@ -22,59 +15,17 @@ REMOTE_SERVER = "172.31.199.2:9094"
 LOCAL_SERVER = "localhost:9094"
 
 
-def produce_to_cpu(producer: KafkaProducer, producer_id: str) -> NoReturn:
-    while True:
-        cpu_percent = psutil.cpu_percent()
-        producer.send(
-            "cpu",
-            key=producer_id.encode(),
-            value=json.dumps({"producer_id": producer_id, "cpu_percent": cpu_percent}).encode(),
-        )
-        time.sleep(0.5)
+def get_user_id() -> str:
+    user_file_path = Path("/tmp/kafka-lab-user-id")  # NOQA: S108
+    if user_file_path.exists():
+        with user_file_path.open() as f:
+            return f.read()
 
+    new_user_id = str(uuid4())
+    with user_file_path.open("w") as f:
+        f.write(new_user_id)
 
-def consume_cpu(consumer: KafkaConsumer) -> None:
-    consumer.subscribe(["cpu"])
-    for msg in consumer:
-        print(msg.value.decode())
-
-
-def produce_jpegs_from_ts(producer: KafkaProducer, ts_url: str) -> None:
-    print(f"Fetching url: {ts_url}")
-    with TemporaryDirectory() as tmpdir:
-        tmppath = Path(tmpdir)
-        try:
-            ffmpeg.FFmpeg().input(ts_url).output(
-                tmppath / "frame_%03d.jpg",
-                vf="fps=1",
-                qscale=2,
-            ).execute()
-        except ffmpeg.errors.FFmpegError as e:
-            print(f"FFmpeg error: {e}")
-            return
-
-        for img in os.listdir(tmppath):
-            print(f"\tSending img: {img}")
-            with (tmppath / img).open("rb") as f:
-                producer.send("jpeg", value=f.read())
-    time.sleep(4)
-
-
-def produce_to_jpeg(producer: KafkaProducer, init_url: str) -> NoReturn:
-    while True:
-        res_text = requests.get(init_url, timeout=10).text
-        latest_ts_url = res_text.splitlines()[-1]
-        produce_jpegs_from_ts(producer, latest_ts_url)
-
-
-def consume_jpeg(consumer: KafkaConsumer) -> None:
-    consumer.subscribe(["jpeg"])
-    for msg in consumer:
-        img = cv2.imdecode(np.frombuffer(msg.value, np.uint8), cv2.IMREAD_COLOR)
-        cv2.imshow("Live Feed", img)
-        cv2.waitKey(1100)
-
-    cv2.destroyAllWindows()
+    return new_user_id
 
 
 def main() -> None:
@@ -91,20 +42,21 @@ def main() -> None:
     if args.local:
         bootstrap_server = LOCAL_SERVER
 
+    user_id = get_user_id()
     match args.subparser:
         case "producer":
             producer = KafkaProducer(bootstrap_servers=bootstrap_server)
             if args.topic == "cpu":
-                produce_to_cpu(producer, "test_prod")
+                cpu.produce(producer, user_id)
             elif args.topic == "jpeg":
-                produce_to_jpeg(producer, "https://hd-auth.skylinewebcams.com/live.m3u8?a=iomkvtaeogle92ctjjr9c8r770")
+                jpeg.produce(producer, "https://hd-auth.skylinewebcams.com/live.m3u8?a=iomkvtaeogle92ctjjr9c8r770")
 
         case "consumer":
             consumer = KafkaConsumer(group_id=args.groupid, bootstrap_servers=bootstrap_server)
             if args.topic == "cpu":
-                consume_cpu(consumer)
+                cpu.consume(consumer)
             elif args.topic == "jpeg":
-                consume_jpeg(consumer)
+                jpeg.consume(consumer)
 
 
 if __name__ == "__main__":
