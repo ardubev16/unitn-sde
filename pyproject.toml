@@ -3,7 +3,13 @@ name = "unitn-sde"
 version = "0.1.0"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = ["kafka-python-ng", "psutil"]
+dependencies = [
+    "kafka-python-ng",
+    "opencv-python",
+    "psutil",
+    "python-ffmpeg",
+    "requests",
+]
 
 [tool.pyright]
 pythonVersion = "3.12"
