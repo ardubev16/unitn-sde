@@ -6,10 +6,10 @@ if __name__ == "__main__":
     print(f"Username: {USERNAME}, Server address: {SERVER}")
 
     producer = KafkaProducer(bootstrap_servers=SERVER)
-    producer.send("test", key=USERNAME)
+    producer.send("test", key=USERNAME.encode())
     print("Producer test OK")
 
-    consumer = KafkaConsumer("test", bootstrap_servers=SERVER)
+    consumer = KafkaConsumer("test", auto_offset_reset="earliest", bootstrap_servers=SERVER)
     test = next(consumer)
 
     if test:
