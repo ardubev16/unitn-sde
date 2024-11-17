@@ -25,6 +25,16 @@ def publish_cpu_usage(producer: KafkaProducer) -> NoReturn:
                 },
             ).encode(),
         )
+
+        # Get RAM usage value
+        ram_value = 
+        # Push RAM usage value to Queue
+
+        value = json.dumps({
+                    "producer_id": USERNAME,
+                    "memory": ram_value,
+                }).encode()
+
         time.sleep(0.5)
 
 
