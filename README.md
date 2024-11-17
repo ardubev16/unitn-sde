@@ -31,3 +31,10 @@ kafka-topics.sh --bootstrap-server localhost:9094 --create --topic <topic_name> 
 ## Run producer and consumer
 
 To start the producer you can do `./main.py producer` and for the consumer `./main.py consumer`. With uv instead of `./main.py` you could use `uv run main.py` without the need to source the virtual environment.
+
+## Run examples and exercises
+
+- `python3 -m lab4.test`: test your configuration and connection with the Broker.
+- `python3 -m lab4.examples.example1`: run example 1
+- `python3 -m lab4.exercises.exercise1`: run exercise 1
+- `python3 -m lab4.assignment.assignment`: run assignment

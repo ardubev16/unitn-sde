@@ -2,8 +2,9 @@ from datetime import datetime
 
 import cv2
 import numpy as np
-from common import SERVER, USERNAME
 from kafka import KafkaConsumer, KafkaProducer
+
+from lab4.common import SERVER, USERNAME
 
 
 def process_video(consumer: KafkaConsumer, producer: KafkaProducer) -> None:

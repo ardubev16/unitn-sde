@@ -3,8 +3,9 @@ import time
 from typing import NoReturn
 
 import psutil
-from common import SERVER, USERNAME
 from kafka import KafkaProducer
+
+from lab4.common import SERVER, USERNAME
 
 
 def publish_cpu_usage(producer: KafkaProducer) -> NoReturn:

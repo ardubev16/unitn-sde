@@ -1,7 +1,8 @@
 import json
 
-from common import SERVER, USERNAME
 from kafka import KafkaConsumer, KafkaProducer
+
+from lab4.common import SERVER, USERNAME
 
 ALPHA = 0.2
 

@@ -1,7 +1,8 @@
 import json
 
-from common import SERVER
 from kafka import KafkaConsumer
+
+from lab4.common import SERVER
 
 
 def read_cpu_usage(consumer: KafkaConsumer) -> None:

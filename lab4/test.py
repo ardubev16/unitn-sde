@@ -1,5 +1,6 @@
-from common import SERVER, USERNAME
 from kafka import KafkaConsumer, KafkaProducer
+
+from lab4.common import SERVER, USERNAME
 
 if __name__ == "__main__":
     print(f"Username: {USERNAME}, Server address: {SERVER}")

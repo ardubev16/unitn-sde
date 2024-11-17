@@ -1,7 +1,8 @@
 import json
 
-from common import SERVER, USERNAME
 from kafka import KafkaConsumer, KafkaProducer
+
+from lab4.common import SERVER, USERNAME
 
 
 def average_resource_util(consumer: KafkaConsumer, producer: KafkaProducer) -> None:

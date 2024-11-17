@@ -3,8 +3,9 @@ import time
 from typing import NoReturn
 
 import psutil
-from common import SERVER, USERNAME
 from kafka import KafkaProducer
+
+from lab4.common import SERVER, USERNAME
 
 
 def publish_cpu_usage(producer: KafkaProducer) -> NoReturn:
@@ -27,13 +28,15 @@ def publish_cpu_usage(producer: KafkaProducer) -> NoReturn:
         )
 
         # Get RAM usage value
-        ram_value = 
+        ram_value = ...
         # Push RAM usage value to Queue
 
-        value = json.dumps({
-                    "producer_id": USERNAME,
-                    "memory": ram_value,
-                }).encode()
+        value = json.dumps(
+            {
+                "producer_id": USERNAME,
+                "memory": ram_value,
+            },
+        ).encode()
 
         time.sleep(0.5)
 
