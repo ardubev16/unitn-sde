@@ -24,4 +24,4 @@ datasources:
   - name: kafka
     type: hamedkarbasi93-kafka-datasource
     jsonData:
-      bootstrapServers: http://kafka:9092
+      bootstrapServers: kafka:9092

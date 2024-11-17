@@ -8,10 +8,10 @@ from uuid import uuid4
 
 from kafka import KafkaConsumer, KafkaProducer
 
-from src import cpu, memory, webcam
+from src import cpu, ram, webcam
 
 logging.basicConfig(level=logging.INFO)
-TOPICS = ["cpu", "memory", "webcam", "cpu_mem"]
+TOPICS = ["cpu", "ram", "webcam", "cpu_mem"]
 REMOTE_SERVER = "172.31.199.2:9094"
 LOCAL_SERVER = "localhost:9094"
 
@@ -40,13 +40,13 @@ def producer(bootstrap_server: str, topic: str, user_id: str) -> None:
     match topic:
         case "cpu":
             cpu.produce(producer, user_id)
-        case "memory":
-            memory.ex1_produce(producer, user_id)
+        case "ram":
+            ram.ex1_produce(producer, user_id)
         case "webcam":
             webcam.produce(producer, "https://hd-auth.skylinewebcams.com/live.m3u8?a=iomkvtaeogle92ctjjr9c8r770")
         case "cpu_mem":
             t_cpu = threading.Thread(target=cpu.produce, args=(producer, user_id))
-            t_memory = threading.Thread(target=memory.ex1_produce, args=(producer, user_id))
+            t_memory = threading.Thread(target=ram.ex1_produce, args=(producer, user_id))
 
             t_cpu.start()
             t_memory.start()
@@ -61,8 +61,8 @@ def consumer(bootstrap_server: str, topic: str, group_id: str) -> None:
     match topic:
         case "cpu":
             cpu.consume(consumer)
-        case "memory":
-            memory.consume(consumer)
+        case "ram":
+            ram.consume(consumer)
         case "webcam":
             webcam.consume(consumer)
         case "cpu_mem":
