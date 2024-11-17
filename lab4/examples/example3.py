@@ -7,7 +7,10 @@ from kafka import KafkaConsumer
 from lab4.common import SERVER
 
 
-def consume_jpeg(consumer: KafkaConsumer) -> None:
+def main() -> None:
+    consumer = KafkaConsumer(group_id=None, bootstrap_servers=SERVER)
+    consumer.subscribe(["webcam"])
+
     for msg in consumer:
         # convert compressed jpeg data to image matrix
         img = cv2.imdecode(np.frombuffer(msg.value, np.uint8), cv2.IMREAD_COLOR)
@@ -20,10 +23,8 @@ def consume_jpeg(consumer: KafkaConsumer) -> None:
         # delay for 1000 ms before showing next frame
         if cv2.waitKey(1000) & 0xFF == ord("q"):
             break  # quit when q is pressed
+    cv2.destroyAllWindows()
 
 
 if __name__ == "__main__":
-    consumer = KafkaConsumer(group_id=None, bootstrap_servers=SERVER)
-    consumer.subscribe(["jpeg"])
-    consume_jpeg(consumer)
-    cv2.destroyAllWindows()
+    main()

@@ -1,8 +1,11 @@
+from common import SERVER, USERNAME
 from kafka import KafkaConsumer, KafkaProducer
 
-from lab4.common import SERVER, USERNAME
-
 if __name__ == "__main__":
+    if USERNAME == "":
+        msg = "Username was not set"
+        raise ValueError(msg)
+
     print(f"Username: {USERNAME}, Server address: {SERVER}")
 
     producer = KafkaProducer(bootstrap_servers=SERVER)

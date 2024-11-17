@@ -7,8 +7,12 @@ from kafka import KafkaConsumer, KafkaProducer
 from lab4.common import SERVER, USERNAME
 
 
-def process_video(consumer: KafkaConsumer, producer: KafkaProducer) -> None:
+def main() -> None:
     img1 = None
+    consumer = KafkaConsumer(group_id=None, bootstrap_servers=SERVER)
+    consumer.subscribe(["webcam"])
+
+    producer = KafkaProducer(bootstrap_servers=SERVER)
 
     for msg in consumer:
         # convert compressed jpeg data to image matrix
@@ -25,7 +29,7 @@ def process_video(consumer: KafkaConsumer, producer: KafkaProducer) -> None:
         producer.send(
             topic="webcam_motion",
             key=USERNAME.encode(),
-            value=cv2.imencode(".png", thresh)[1],
+            value=cv2.imencode(".png", thresh)[1].tobytes(),
         )
 
         # show frame on screen
@@ -33,11 +37,8 @@ def process_video(consumer: KafkaConsumer, producer: KafkaProducer) -> None:
         # delay for 1000 ms before showing next frame
         if cv2.waitKey(1000) & 0xFF == ord("q"):
             break  # quit when q is pressed
+    cv2.destroyAllWindows()
 
 
 if __name__ == "__main__":
-    consumer = KafkaConsumer(group_id=None, bootstrap_servers=SERVER)
-    producer = KafkaProducer(bootstrap_servers=SERVER)
-    consumer.subscribe(["jpeg"])
-    process_video(consumer, producer)
-    cv2.destroyAllWindows()
+    main()
