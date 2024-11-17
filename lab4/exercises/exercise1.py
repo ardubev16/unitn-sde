@@ -1,10 +1,13 @@
 import json
+import sys
 import time
+from pathlib import Path
 from typing import NoReturn
 
 import psutil
 from kafka import KafkaProducer
 
+sys.path.append(str(Path(__file__).resolve().parents[2]))
 from lab4.common import SERVER, USERNAME
 
 

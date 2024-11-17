@@ -1,13 +1,20 @@
 import json
+import sys
+from pathlib import Path
 
 from kafka import KafkaConsumer, KafkaProducer
 
+sys.path.append(str(Path(__file__).resolve().parents[2]))
 from lab4.common import SERVER, USERNAME
 
 ALPHA = 0.2
 
 
-def average_resource_util(consumer: KafkaConsumer, producer: KafkaProducer) -> None:
+def main() -> None:
+    consumer = KafkaConsumer(group_id=None, bootstrap_servers=SERVER)
+    producer = KafkaProducer(bootstrap_servers=SERVER)
+    consumer.subscribe(["cpu", "ram"])
+
     cpu_avg = 0
     processes_avg = 0
     ram_avg = 0
@@ -47,7 +54,4 @@ def average_resource_util(consumer: KafkaConsumer, producer: KafkaProducer) -> N
 
 
 if __name__ == "__main__":
-    consumer = KafkaConsumer(group_id=None, bootstrap_servers=SERVER)
-    producer = KafkaProducer(bootstrap_servers=SERVER)
-    consumer.subscribe(["cpu", "ram"])
-    average_resource_util(consumer, producer)
+    main()

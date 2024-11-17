@@ -1,9 +1,12 @@
+import sys
 from datetime import datetime
+from pathlib import Path
 
 import cv2
 import numpy as np
 from kafka import KafkaConsumer
 
+sys.path.append(str(Path(__file__).resolve().parents[2]))
 from lab4.common import SERVER
 
 

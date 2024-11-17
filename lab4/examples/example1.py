@@ -1,10 +1,14 @@
 import json
+import sys
 import time
+from pathlib import Path
 from typing import NoReturn
 
 import psutil
 from kafka import KafkaProducer
 
+#Add the parent folder to path so the common file can be imported
+sys.path.append(str(Path(__file__).resolve().parents[2]))
 from lab4.common import SERVER, USERNAME
 
 

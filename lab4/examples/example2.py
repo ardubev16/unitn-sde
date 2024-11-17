@@ -1,7 +1,10 @@
 import json
+import sys
+from pathlib import Path
 
 from kafka import KafkaConsumer
 
+sys.path.append(str(Path(__file__).resolve().parents[2]))
 from lab4.common import SERVER
 
 

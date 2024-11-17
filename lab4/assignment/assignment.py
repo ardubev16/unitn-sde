@@ -1,13 +1,21 @@
 import json
+import sys
+from pathlib import Path
 
 from kafka import KafkaConsumer, KafkaProducer
 
+sys.path.append(str(Path(__file__).resolve().parents[2]))
 from lab4.common import SERVER, USERNAME
 
 
-def average_resource_util(consumer: KafkaConsumer, producer: KafkaProducer) -> None:
+def main() -> None:
+    consumer = KafkaConsumer(group_id=None, bootstrap_servers=SERVER)
+    producer = KafkaProducer(bootstrap_servers=SERVER)
+    consumer.subscribe(["cpu_avg", "ram_avg"])
+
     cpu_buffer = 1
     ram_buffer = 1
+
     for msg in consumer:
         value = json.loads(msg.value.decode())
 
@@ -17,20 +25,14 @@ def average_resource_util(consumer: KafkaConsumer, producer: KafkaProducer) -> N
             ram_buffer = value["ram"]
 
         result = ram_buffer / cpu_buffer
-        value = json.dumps(
-            {
-                "process_avg_mem": result,
-            },
-        )
+        value = json.dumps({"process_avg_mem": result})
+
         producer.send(
             topic="process_ram_avg",
             key=USERNAME.encode(),
-            value=value.encode,
+            value=value.encode(),
         )
 
 
 if __name__ == "__main__":
-    consumer = KafkaConsumer(group_id=None, bootstrap_servers=SERVER)
-    producer = KafkaProducer(bootstrap_servers=SERVER)
-    consumer.subscribe(["cpu_avg", "ram_avg"])
-    average_resource_util(consumer, producer)
+    main()
