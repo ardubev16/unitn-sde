@@ -9,6 +9,7 @@ from kafka import KafkaConsumer
 sys.path.append(str(Path(__file__).resolve().parents[2]))
 from lab4.common import SERVER
 
+""" This example code simply visualzies video frames from a webcam on screen using cv2 """
 
 def main() -> None:
     consumer = KafkaConsumer(group_id=None, bootstrap_servers=SERVER)

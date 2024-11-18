@@ -5,12 +5,13 @@ from pathlib import Path
 from typing import NoReturn
 
 import psutil
-from kafka import KafkaProducer
+from kafka import KafkaProducer  # kafka-python-ng library
 
 #Add the parent folder to path so the common file can be imported
 sys.path.append(str(Path(__file__).resolve().parents[2]))
 from lab4.common import SERVER, USERNAME
 
+""" In this example we create a simple kafka producer that pushes CPU statistics to a broker """
 
 def main() -> NoReturn:
     producer = KafkaProducer(bootstrap_servers=SERVER)

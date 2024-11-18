@@ -10,6 +10,15 @@ from kafka import KafkaProducer
 sys.path.append(str(Path(__file__).resolve().parents[2]))
 from lab4.common import SERVER, USERNAME
 
+"""
+    In this exercise you are required to write a producer that pushes two different kinds of information:
+    CPU and RAM usage.
+
+    The CPU code is already present and is the same from exercise 1
+
+    You are simply required to add the code to also push the RAM usage (in bytes) to the "ram" topic.
+
+"""
 
 def main() -> NoReturn:
     producer = KafkaProducer(bootstrap_servers=SERVER)
