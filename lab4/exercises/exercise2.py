@@ -20,11 +20,12 @@ def main() -> None:
     """
     consumer = KafkaConsumer(group_id=None, bootstrap_servers=SERVER)
     # TODO: subcribe to webcam stream
+    consumer.subscribe(["webcam"])
 
     producer = KafkaProducer(bootstrap_servers=SERVER)
 
     # TODO: initialize the buffer of the image frame the first time
-    img_buffered = None
+    img_buffered = cv2.imdecode(np.frombuffer(next(consumer).value, np.uint8), cv2.IMREAD_COLOR)
     for msg in consumer:
         # convert compressed jpeg data to image matrix
         img = cv2.imdecode(np.frombuffer(msg.value, np.uint8), cv2.IMREAD_COLOR)
@@ -40,6 +41,11 @@ def main() -> None:
         value = cv2.imencode(".png", thresh)[1].tobytes()
 
         # TODO: publish result to "webcam_motion" topic
+        producer.send(
+            topic="webcam_motion",
+            key=USERNAME.encode(),
+            value=value,
+        )
 
         # show frame on screen
         cv2.imshow("Piazza Di Spagna - Motion", thresh)

@@ -41,7 +41,7 @@ def main() -> NoReturn:
             value=value.encode(),
         )
 
-        ram_value = ...  # TODO: get the number of used RAM bytes using psutil
+        ram_value = psutil.virtual_memory().used
 
         value = json.dumps(
             {
@@ -51,6 +51,11 @@ def main() -> NoReturn:
         ).encode()
 
         # TODO: push json value to the "ram" topic
+        producer.send(
+            topic="ram",
+            key=USERNAME.encode(),
+            value=value,
+        )
 
         time.sleep(0.5)
 
