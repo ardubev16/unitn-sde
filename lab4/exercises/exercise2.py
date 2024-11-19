@@ -11,26 +11,23 @@ from lab4.common import SERVER, USERNAME
 
 def main() -> None:
     """
-    In this exercise you are required to write a consumer that processes images from the webcam stream
+    In this exercise you are required to write a consumer that processes images from the webcam stream.
 
     The images are read from the "webcam" topic and the processes images need to be pushed to the
     "webcam_motion" topic.
 
     The processing code is already present, you will simply have to add the kafka code yourself to make it work.
     """
-
     consumer = KafkaConsumer(group_id=None, bootstrap_servers=SERVER)
     # TODO: subcribe to webcam stream
 
     producer = KafkaProducer(bootstrap_servers=SERVER)
-
 
     # TODO: initialize the buffer of the image frame the first time
     img_buffered = None
     for msg in consumer:
         # convert compressed jpeg data to image matrix
         img = cv2.imdecode(np.frombuffer(msg.value, np.uint8), cv2.IMREAD_COLOR)
-
 
         # using cv2 extract the motion
         difference = np.abs(cv2.subtract(img_buffered, img))

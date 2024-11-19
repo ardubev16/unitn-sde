@@ -9,16 +9,15 @@ from lab4.common import SERVER, USERNAME
 
 ALPHA = 0.2
 
+
 def main() -> None:
     """
-    In this assignment you are required to write a consumer that processes the data from the "cpu" and "ram" topics
+    In this assignment you are required to write a consumer that processes the data from the "cpu" and "ram" topics.
 
     you will have to subscribe to two topics at once.
 
-    for both cpu and ram, compute an exmponential moving average and push it it to respective topics:
-    "cpu_avg" and "ram_avg"
+    for both cpu and ram, compute an exmponential moving average and push it it to respective topics: "cpu_avg" and "ram_avg"
     """
-
     consumer = KafkaConsumer(group_id=None, bootstrap_servers=SERVER)
     # TODO: Subscribe to two topics
 

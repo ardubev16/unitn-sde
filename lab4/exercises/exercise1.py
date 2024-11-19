@@ -13,8 +13,7 @@ from lab4.common import SERVER, USERNAME
 
 def main() -> NoReturn:
     """
-    In this exercise you are required to write a producer that pushes two different kinds of information:
-    CPU and RAM usage.
+    In this exercise you are required to write a producer that pushes two different kinds of information: CPU and RAM usage.
 
     The CPU code is already present and is the same from exercise 1
 
@@ -42,7 +41,7 @@ def main() -> NoReturn:
             value=value.encode(),
         )
 
-        ram_value = ... # TODO: get the number of used RAM bytes using psutil
+        ram_value = ...  # TODO: get the number of used RAM bytes using psutil
 
         value = json.dumps(
             {

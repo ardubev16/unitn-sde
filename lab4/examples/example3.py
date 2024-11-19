@@ -10,10 +10,8 @@ sys.path.append(str(Path(__file__).resolve().parents[2]))
 from lab4.common import SERVER
 
 
-
 def main() -> None:
-    """ This example code simply visualzies video frames from a webcam on screen using cv2 """
-    
+    """Visualze video frames from a webcam on screen using cv2."""
     consumer = KafkaConsumer(group_id=None, bootstrap_servers=SERVER)
     consumer.subscribe(["webcam"])
 

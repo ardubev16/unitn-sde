@@ -9,10 +9,7 @@ from lab4.common import SERVER
 
 
 def main() -> None:
-    """
-    In this example we create a simple kafka consumer that prints to the
-    screen the cpu statics of all students on the screen
-    """
+    """Create a simple kafka consumer that prints to the screen the cpu statics of all students on the screen."""
     consumer = KafkaConsumer(group_id=None, bootstrap_servers=SERVER)
     consumer.subscribe(["cpu"])
 

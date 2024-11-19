@@ -15,17 +15,19 @@ from lab4.common import SERVER
 
 INIT_URL = "https://hd-auth.skylinewebcams.com/live.m3u8?a=3thv677ivptnbchuie8jssdhv6"
 
+
 def main() -> NoReturn:
     """
-    This producer is already run by us we do not require students to run this file.
+    Use ffmpeg and cv2 to extract frames from a publically available webcam and push them to kakfa.
 
-    This script uses ffmpeg and cv2 to extract frames from a publically available webcam and pushes them to kakfa
+    NOTE: This producer is already run by us, we do not require students to run this file.
     """
     producer = KafkaProducer(bootstrap_servers=SERVER)
     while True:
         res_text = requests.get(INIT_URL, timeout=10).text
         latest_ts_url = res_text.splitlines()[-1]
         produce_jpegs_from_ts(producer, latest_ts_url)
+
 
 def produce_jpegs_from_ts(producer: KafkaProducer, ts_url: str) -> None:
     print(f"Fetching url: {ts_url}")
