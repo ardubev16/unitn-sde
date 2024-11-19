@@ -7,13 +7,12 @@ from kafka import KafkaConsumer
 sys.path.append(str(Path(__file__).resolve().parents[2]))
 from lab4.common import SERVER
 
-"""
-    In this example we create a simple kafka consumer that prints to the
-    screen the cpu statics of all students on the screen
-"""
-
 
 def main() -> None:
+    """
+    In this example we create a simple kafka consumer that prints to the
+    screen the cpu statics of all students on the screen
+    """
     consumer = KafkaConsumer(group_id=None, bootstrap_servers=SERVER)
     consumer.subscribe(["cpu"])
 

@@ -11,9 +11,9 @@ from kafka import KafkaProducer  # kafka-python-ng library
 sys.path.append(str(Path(__file__).resolve().parents[2]))
 from lab4.common import SERVER, USERNAME
 
-""" In this example we create a simple kafka producer that pushes CPU statistics to a broker """
 
 def main() -> NoReturn:
+    """ In this example we create a simple kafka producer that pushes CPU statistics to a broker """
     producer = KafkaProducer(bootstrap_servers=SERVER)
 
     while True:

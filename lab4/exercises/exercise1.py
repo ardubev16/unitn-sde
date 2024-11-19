@@ -10,17 +10,16 @@ from kafka import KafkaProducer
 sys.path.append(str(Path(__file__).resolve().parents[2]))
 from lab4.common import SERVER, USERNAME
 
-"""
+
+def main() -> NoReturn:
+    """
     In this exercise you are required to write a producer that pushes two different kinds of information:
     CPU and RAM usage.
 
     The CPU code is already present and is the same from exercise 1
 
     You are simply required to add the code to also push the RAM usage (in bytes) to the "ram" topic.
-
-"""
-
-def main() -> NoReturn:
+    """
     producer = KafkaProducer(bootstrap_servers=SERVER)
 
     while True:
@@ -43,9 +42,7 @@ def main() -> NoReturn:
             value=value.encode(),
         )
 
-        # Get RAM usage value
-        ram_value = ...
-        # Push RAM usage value to Queue
+        ram_value = ... # TODO: get the number of used RAM bytes using psutil
 
         value = json.dumps(
             {
@@ -53,6 +50,8 @@ def main() -> NoReturn:
                 "memory": ram_value,
             },
         ).encode()
+
+        # TODO: push json value to the "ram" topic
 
         time.sleep(0.5)
 
